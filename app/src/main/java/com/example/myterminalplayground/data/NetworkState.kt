@@ -1,3 +1,10 @@
 package com.example.myterminalplayground.data
 
-sealed class NetworkState
+import com.papershift.apiclient.microya.JsonApiException
+
+sealed class NetworkState<out T> {
+    object Loading : NetworkState<Nothing>()
+    data class Success<T>(val data : T) : NetworkState<T>()
+    data class Error<T>(val jsonApiException: JsonApiException) : NetworkState<T>()
+}
+

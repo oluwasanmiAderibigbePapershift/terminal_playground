@@ -1,4 +1,7 @@
 package com.example.myterminalplayground.domain.model
 
-class SignInModel {
-}
+data class SignInModel(
+    val userName : String,
+    val email : String,
+    val id : Int
+)
