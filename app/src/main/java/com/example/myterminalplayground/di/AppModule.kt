@@ -1,5 +1,6 @@
 package com.example.myterminalplayground.di
 
+import com.example.myterminalplayground.data.mapper.PapershiftTeminalMapper
 import com.example.myterminalplayground.data.repository.PaperAuthRepository
 import com.example.myterminalplayground.domain.repository.authenication.AuthenticationRepository
 import com.example.myterminalplayground.domain.usecase.authentication.SignInUseCase
@@ -17,8 +18,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesPaperShiftAuthRepository(apiProvider: ApiProvider): PaperAuthRepository {
-        return PaperAuthRepository(apiProvider)
+    fun providesPaperShiftAuthRepository(apiProvider: ApiProvider, teminalMapper: PapershiftTeminalMapper): PaperAuthRepository {
+        return PaperAuthRepository(apiProvider, teminalMapper)
     }
 
     @Provides
@@ -27,6 +28,12 @@ object AppModule {
         return SignInUseCase(authenticationRepository)
     }
 
+
+    @Provides
+    @Singleton
+    fun providesTerminalMapper() : PapershiftTeminalMapper{
+        return PapershiftTeminalMapper()
+    }
 
 
     @Module

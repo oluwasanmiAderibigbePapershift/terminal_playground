@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myterminalplayground.data.NetworkState
-import com.example.myterminalplayground.domain.model.SignInModel
+import com.example.myterminalplayground.domain.model.authentication.SignInModel
 import com.example.myterminalplayground.domain.usecase.authentication.SignInUseCase
 import com.papershift.apiclient.microya.JsonApiException
 import kotlinx.coroutines.Dispatchers
@@ -24,12 +24,14 @@ class LoginViewModel @ViewModelInject constructor(
     fun signIn(email: String, password: String) {
         //Inject dispatcher
         viewModelScope.launch(Dispatchers.IO) {
+            _signInState.postValue(UIState.Loading)
             signInUseCase.execute(email, password).also { networkState ->
                 Log.d("Login:", "Net work : ${networkState::class.simpleName}")
                 when (networkState) {
-                    NetworkState.Loading ->_signInState.postValue(UIState.Loading)
+                    NetworkState.Loading -> { }
                     is NetworkState.Success -> _signInState.postValue(UIState.Success(networkState.data))
                     is NetworkState.Error -> {
+                        Log.d("Login:", "Net work : ${networkState.jsonApiException.message} ${networkState::class.simpleName}")
                         when (networkState.jsonApiException) {
                             JsonApiException.NoResponseReceived -> {
                             }

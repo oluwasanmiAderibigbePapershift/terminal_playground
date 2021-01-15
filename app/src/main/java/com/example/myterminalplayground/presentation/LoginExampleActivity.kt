@@ -26,15 +26,7 @@ class LoginExampleActivity : AppCompatActivity() {
         val loginView = findViewById<LoginView>(R.id.login_form)
         val progressBar = findViewById<ProgressBar>(R.id.pb_sign_in)
 
-        loginViewModel.signInState.observe(this ){uiState ->
-            when(uiState){
-                UIState.Loading -> {progressBar.visibility = View.VISIBLE}
-                is UIState.Success -> {
-                    Log.d("Login", "Success : ${uiState.data}")
-                    progressBar.visibility = View.GONE}
-                is UIState.Error -> {progressBar.visibility = View.INVISIBLE}
-            }
-        }
+
 
         loginView.setupWithState(
             LoginViewState(
@@ -52,7 +44,15 @@ class LoginExampleActivity : AppCompatActivity() {
             )
         )
 
-
+        loginViewModel.signInState.observe(this ){uiState ->
+            when(uiState){
+                UIState.Loading -> {progressBar.visibility = View.VISIBLE}
+                is UIState.Success -> {
+                    Log.d("Login", "Success : ${uiState.data}")
+                    progressBar.visibility = View.INVISIBLE}
+                is UIState.Error -> {progressBar.visibility = View.INVISIBLE}
+            }
+        }
 
 
     }
