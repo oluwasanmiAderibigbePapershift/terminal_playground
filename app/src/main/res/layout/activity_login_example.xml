@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:indeterminateTint="@android:color/holo_red_light"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

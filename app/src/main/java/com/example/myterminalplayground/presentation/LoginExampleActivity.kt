@@ -1,17 +1,16 @@
 package com.example.myterminalplayground.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.example.myterminalplayground.R
+import com.example.myterminalplayground.presentation.UIState.*
 import com.papershift.design.component.LoginView
 import com.papershift.design.component.LoginViewState
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.filterList
 
 @AndroidEntryPoint
 class LoginExampleActivity : AppCompatActivity() {
@@ -26,34 +25,31 @@ class LoginExampleActivity : AppCompatActivity() {
         val loginView = findViewById<LoginView>(R.id.login_form)
         val progressBar = findViewById<ProgressBar>(R.id.pb_sign_in)
 
-
-
         loginView.setupWithState(
             LoginViewState(
-                "vb+test@gmail.com",
-                {},
-                "VarshaTest$07",
-                {},
-                true,
-                {
-
+                email = "vb+test@gmail.com",
+                onEmailChange = {},
+                password = "VarshaTest$07",
+                onPasswordChange = {},
+                loginButtonEnabled = true,
+                onLoginClick = {
                     loginViewModel.signIn("vb+test@gmail.com", "VarshaTest$07")
                 },
-                {},
-                {}
+                onRegisterClick = {},
+                onForgotPasswordClick = {}
             )
         )
 
-        loginViewModel.signInState.observe(this ){uiState ->
-            when(uiState){
-                UIState.Loading -> {progressBar.visibility = View.VISIBLE}
-                is UIState.Success -> {
+        loginViewModel.signInState.observe(this) { uiState ->
+            when (uiState) {
+                is Loading -> progressBar.visibility = View.VISIBLE
+                is Error -> progressBar.visibility = View.GONE
+                is Success -> {
                     Log.d("Login", "Success : ${uiState.data}")
-                    progressBar.visibility = View.INVISIBLE}
-                is UIState.Error -> {progressBar.visibility = View.INVISIBLE}
+                    progressBar.visibility = View.GONE
+                }
+
             }
         }
-
-
     }
 }

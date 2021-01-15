@@ -28,10 +28,14 @@ class LoginViewModel @ViewModelInject constructor(
             signInUseCase.execute(email, password).also { networkState ->
                 Log.d("Login:", "Net work : ${networkState::class.simpleName}")
                 when (networkState) {
-                    NetworkState.Loading -> { }
+                    NetworkState.Loading -> {
+                    }
                     is NetworkState.Success -> _signInState.postValue(UIState.Success(networkState.data))
                     is NetworkState.Error -> {
-                        Log.d("Login:", "Net work : ${networkState.jsonApiException.message} ${networkState::class.simpleName}")
+                        Log.d(
+                            "Login:",
+                            "Net work : ${networkState.jsonApiException.message} ${networkState::class.simpleName}"
+                        )
                         when (networkState.jsonApiException) {
                             JsonApiException.NoResponseReceived -> {
                             }
@@ -42,7 +46,8 @@ class LoginViewModel @ViewModelInject constructor(
                             is JsonApiException.ClientError -> {
                             }
                             is JsonApiException.ServerError -> {
-                                Log.d("Login", networkState.jsonApiException.message.toString())}
+                                Log.d("Login", networkState.jsonApiException.message.toString())
+                            }
                             is JsonApiException.UnexpectedStatusCode -> {
                             }
                             is JsonApiException.UnexpectedException -> {
