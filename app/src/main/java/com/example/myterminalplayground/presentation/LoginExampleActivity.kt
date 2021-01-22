@@ -14,9 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginExampleActivity : AppCompatActivity() {
-
     private val loginViewModel by viewModels<LoginViewModel>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,18 +25,34 @@ class LoginExampleActivity : AppCompatActivity() {
 
         loginView.setupWithState(
             LoginViewState(
-                email = "vb+test@gmail.com",
+                email = "",
                 onEmailChange = {},
-                password = "VarshaTest$07",
+                password = "",
                 onPasswordChange = {},
                 loginButtonEnabled = true,
-                onLoginClick = {
-                    loginViewModel.signIn("vb+test@gmail.com", "VarshaTest$07")
-                },
+                onLoginClick = {},
                 onRegisterClick = {},
                 onForgotPasswordClick = {}
             )
         )
+
+        loginView.updateState {
+            onEmailChange = {
+                it.let {
+                    this.email = it
+                }
+            }
+
+            onPasswordChange = {
+                it.let {
+                    this.password = it
+                }
+            }
+
+            onLoginClick = {
+                handleLogin(this.email, this.password)
+            }
+        }
 
         loginViewModel.signInState.observe(this) { uiState ->
             when (uiState) {
@@ -51,5 +65,9 @@ class LoginExampleActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    private fun handleLogin(email: String?, password: String?) {
+        loginViewModel.signIn(email.toString(), password.toString())
     }
 }
